@@ -30,7 +30,7 @@ new Vue({
       this.currentPage = 1;
 
       try {
-        const response = await axios.post('http://localhost:3000/scrape', {
+        const response = await axios.post('/scrape', {
           url: this.url,
           tags: this.tags
         });
