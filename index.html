@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Scrap Basic</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  </head>
+
+  <body class="bg-gray-900 text-gray-100">
+    <div id="app" class="container w-2/3 mx-auto p-4">
+      <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h1 class="text-2xl font-bold mb-4">Maling Data Web</h1>
+        <form @submit.prevent="scrapeData">
+          <div class="mb-4">
+            <label for="url" class="block text-lg">Cari dulu link nya</label>
+            <input type="text" id="url" v-model="url"
+              class="w-full p-2 border border-gray-700 rounded-lg bg-gray-900 text-gray-100">
+          </div>
+          <div class="mb-4">
+            <label class="block text-lg">Ayo tentukan konten apa yang diambil</label>
+            <div v-for="(tag, index) in tags" :key="index" class="flex items-center mb-2">
+              <input type="text" v-model="tags[index]"
+                class="w-full p-2 border border-gray-700 rounded-lg bg-gray-900 text-gray-100"
+                placeholder="nama class / id">
+              <button type="button" @click="removeTag(index)"
+                class="ml-2 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none">
+                Minus
+              </button>
+            </div>
+            <button type="button" @click="addTag"
+              class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none">
+              Plus
+            </button>
+          </div>
+          <button type="submit" :disabled="loading"
+            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline">
+            <span v-if="loading">Loading...</span>
+            <span v-else>Lesgo Maling</span>
+          </button>
+        </form>
+        <div v-if="scrapedData.length" class="mt-6">
+          <div v-for="(entry, index) in paginatedData" :key="index" class="mb-4 p-4 bg-gray-700 rounded-lg shadow-lg">
+            <div class="text-3xl font-bold text-blue-400 mb-2">{{ index + 1 + (currentPage - 1) * pageSize }}.</div>
+            <div v-for="(value, tag) in entry" :key="tag" class="mb-2">
+              <h5 class="text-xl font-bold">{{ tag }}</h5>
+              <p>{{ value }}</p>
+            </div>
+          </div>
+          <div class="flex justify-between mt-4">
+            <button @click="previousPage" :disabled="currentPage === 1"
+              class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none">
+              Previous
+            </button>
+            <button @click="nextPage" :disabled="currentPage * pageSize >= scrapedData.length"
+              class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none">
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+
+</html>
